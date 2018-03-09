@@ -1,0 +1,30 @@
+WEBVTT with text after the signature
+
+STYLE
+::cue {
+  background-image: linear-gradient(to bottom, dimgray, lightgray);
+  color: papayawhip;
+}
+/* Style blocks cannot use blank lines nor "dash dash greater than" */
+
+NOTE comment blocks can be used between style blocks.
+
+STYLE
+::cue(b) {
+  color: peachpuff;
+}
+
+REGION
+id:bill
+width:40%
+lines:3
+regionanchor:0%,100%
+viewportanchor:10%,90%
+scroll:up
+
+NOTE
+Notes always span a whole block and can cover multiple
+lines. Like this one.
+An empty line ends the block.
+
+hello

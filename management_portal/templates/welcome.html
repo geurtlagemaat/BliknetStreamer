@@ -1,0 +1,15 @@
+{% extends "_base.html" %}
+{% block body %}
+<h2>BliknetStreamer beheerportaal</h2>
+
+<p>Welkom bij het BliknetStreamer beheerportaal.</p>
+
+<p>
+    {% if user %}
+    Je bent ingelogd als <b>{{ user.full_name }}</b>.
+    {% else %}
+    Je moet <a href="/login">inloggen</a> om van de functionaliteit
+    gebruik te maken.
+    {% endif %}
+</p>
+{% endblock %}

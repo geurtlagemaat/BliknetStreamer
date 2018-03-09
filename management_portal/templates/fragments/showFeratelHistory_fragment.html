@@ -1,0 +1,19 @@
+<table class="table table-hover message-records">
+    <thead>
+    <tr class="row">
+        <th>Camera ID</th>
+        <th>Aanduiding</th>
+        <th>Gebeurtenis</th>
+        <th>Datum</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for histEntry in myHist %}
+    <tr class="row">
+        <td class="text-nowrap"><p>{{ histEntry.feratelcamid }}</p></td>
+        <td class="text-nowrap"><p>{{ histEntry.caption }}</p></td>
+        <td class="text-nowrap"><p>{{ histEntry.event }}</p></td>
+        <td class="text-nowrap"><p>{{ histEntry.updateDate }}</p></td>
+    </tr>
+    {% endfor %}
+</table>

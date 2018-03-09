@@ -1,0 +1,233 @@
+{% extends "_base.html" %}
+{% block body %}
+<h2>Portaalgebruikers</h2>
+
+<p>Bestaande gebruikers:</p>
+<table class="formatted users table table-condensed">
+    <thead>
+    <tr>
+        <th>Inlognaam</th>
+        <th>Volledige naam</th>
+        <th>Machtigingen</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for u in users %}
+    <tr>
+        <td>{{ u.login_name }}</td>
+        <td>{{ u.full_name }}</td>
+        <td>
+            {% if u.super_user %}
+            Superuser (alle machtigingen)
+            {% else %}
+            {% for d in u.getCapabilityDescriptions() %}
+            {{ d }}<br>
+            {% endfor %}
+            {% endif %}
+        </td>
+        <td>
+            <button type="button" class="edit-user"
+                    data-login_name="{{ u.login_name }}">bewerken
+            </button>
+            {% if u != user %}
+            <button type="button" class="delete-user"
+                    data-login_name="{{ u.login_name }}">verwijderen
+            </button>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<p>
+    <button type="button" class="create-user">Nieuwe gebruiker</button>
+</p>
+
+<form id="user" style="display: none">
+    <h3>Gebruiker</h3>
+
+    <div id="user-message" class="message error" style="display: none">
+    </div>
+
+    <fieldset style="width: 400px">
+        <table style="width: 100%">
+            <tr>
+                <td>
+                    <label for="login_name">Inlognaam:</label>
+                </td>
+                <td>
+                    <input type="text" name="login_name" autofocus="autofocus" id="login_name" style="width: 100%">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="full_name">Volledige naam:</label>
+                </td>
+                <td>
+                    <input type="text" name="full_name" id="full_name" style="width: 100%">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="password1">Wachtwoord:</label>
+                </td>
+                <td><input type="password" name="password1" id="password1" style="width: 100%"></td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="password2">Wachtwoord nogmaals:</label>
+                </td>
+                <td><input type="password" name="password2" id="password2" style="width: 100%"></td>
+            </tr>
+            <tr>
+                <td>
+
+                </td>
+                <td>
+                    <input type="checkbox" name="super_user" id="super_user">
+                    <label for="super_user">Super-user</label><br>
+
+                    {% for c in capabilities %}
+                    <input type="checkbox" class="capability" name="cap-{{ c.name }}" id="cap-{{ c.name }}">
+                    <label for="cap-{{ c.name }}">{{ c.description }}</label><br>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input id="save-user" type="submit" value="Opslaan"></td>
+            </tr>
+        </table>
+    </fieldset>
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        $('.edit-user').click(editUser);
+        $('.delete-user').click(deleteUser);
+        $('.create-user').click(createUser);
+
+        $('#save-user').click(saveUser);
+
+        $('#super_user').click(updateEnabled);
+    });
+
+    function editUser(evt) {
+        evt.preventDefault();
+        var login_name = $(this).data('login_name');
+
+        // Get user data from server
+        $.ajax({
+            url: '/user',
+            data: {
+                login_name: login_name
+            },
+            success: function (data, status) {
+                if (status == 404) {
+                    alert('Gebruiker niet gevonden.');
+                } else {
+                    setFormValues(data.user);
+                    $('#user').show();
+                    $('#login_name').focus();
+                }
+            },
+            error: function (data) {
+                showError('Interne serverfout: raadpleeg <code>jsi.log</code> voor meer info');
+            }
+        });
+    }
+
+    function deleteUser(evt) {
+        evt.preventDefault();
+        var login_name = $(this).data('login_name');
+        var message = 'Weet je zeker dat je de gebruiker ' + login_name + ' wilt verwijderen?';
+        if (!confirm(message))
+            return;
+
+        $.ajax({
+            url: '/user?login_name=' + login_name,
+            type: 'DELETE',
+            success: function () {
+                location.reload();
+            },
+            error: function (data) {
+                showError('Interne serverfout: raadpleeg <code>jsi.log</code> voor meer info');
+            }
+        });
+    }
+
+    function createUser(evt) {
+        evt.preventDefault();
+        $('#user').show();
+
+        setFormValues({});
+        $('#login_name').focus();
+    }
+
+    function setFormValues(values) {
+        $('#login_name').val(values.login_name);
+        $('#full_name').val(values.full_name);
+        $('#password1').val('');
+        $('#password2').val('');
+
+
+        $('#super_user').prop('checked', values.super_user);
+        $('.capability').prop('checked', false);
+        $.each(values.capabilities, function (idx, capName) {
+            $('#cap-' + capName).prop('checked', true);
+        });
+
+        updateEnabled();
+    }
+
+    function saveUser(evt) {
+        evt.preventDefault();
+        var user = getFormValues();
+        $.ajax({
+            url: '/user',
+            type: 'POST',
+            data: {user: JSON.stringify(user)},
+            success: function (data) {
+                if (data == 'ok')
+                    location.reload();
+                else
+                    showError(data.message);
+            },
+            error: function (data) {
+                showError('Interne serverfout: raadpleeg <code>jsi.log</code> voor meer info');
+            }
+        });
+    }
+
+    function getFormValues() {
+        var res = {};
+        res.login_name = $('#login_name').val();
+        res.full_name = $('#full_name').val();
+        res.password1 = $('#password1').val();
+        res.password2 = $('#password2').val();
+        res.super_user = $('#super_user').prop('checked');
+        res.capabilities = [];
+        $('.capability').each(function (idx, chb) {
+            if ($(chb).prop('checked')) {
+                var capName = $(chb).prop('id').split('cap-')[1];
+                res.capabilities.push(capName);
+            }
+        });
+        return res;
+    }
+
+    function updateEnabled() {
+        var isSuperUser = $('#super_user').prop('checked');
+        $('.capability').prop('disabled', isSuperUser);
+    }
+
+    function showError(msg) {
+        $('#user-message').html(msg);
+        $('#user-message').show();
+    }
+</script>
+{% endblock %}

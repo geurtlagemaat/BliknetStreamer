@@ -1,0 +1,75 @@
+<div id="cssmenu">
+    <ul>
+        <li class="has-sub {% if path == '/' %}active{% endif %}">
+            <a href="/"><span>Home</span></a>
+        </li>
+        {% if hasCap('operational') %}
+        <li class="has-sub {% if path == '/operational' %}active{% endif %}">
+            <a> <!--  href="/operational" -->
+                <span>Operationeel</span>
+            </a>
+            <ul>
+                <li>
+                    <a href="/operational"><span>Chrome Cast bediening</span></a>
+                </li>
+                <li>
+                    <a href="/seccams"><span>Bewakingscameras</span></a>
+                </li>
+            </ul>
+        </li>
+        {% endif %}
+        {% if hasCap('config') %}
+        <li class="has-sub {% if path == '/config' %}active{% endif %}">
+            <a>
+                <span>Feratel Configuratie</span>
+            </a>
+            <ul>
+                <li>
+                    <a href="/config">
+                        <span>Camera's</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/feratelHistory">
+                        <span>Camera geschiedenis</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        {% endif %}
+        {% if hasCap('config') %}
+        <li class="has-sub {% if path == '/config' %}active{% endif %}">
+            <a>
+                <span>Playlists</span>
+            </a>
+            <ul>
+                <li>
+                    <a href="/managePlaylists">
+                        <span>Playlist beheer</span>
+                    </a>
+                </li>
+                <!-- <li>
+                    <a href="/feratelHistory">
+                        <span>Camera geschiedenis</span>
+                    </a>
+                </li>  -->
+            </ul>
+        </li>
+        {% endif %}
+        {% if hasCap('manage_users') %}
+        <li class="last {% if path == '/users' %}active{% endif %}">
+            <a href="/users">
+                <span>Gebruikers</span>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+    <div id="logo">
+        <b>BliknetStreamer beheerportaal</b>
+        {% if user %}
+        (ingelogd als {{ user.full_name }}, <a href="/logout">uitloggen</a>)
+        {% else %}
+        (<a href="/login">inloggen</a>)
+        {% endif %}
+    </div>
+</div>

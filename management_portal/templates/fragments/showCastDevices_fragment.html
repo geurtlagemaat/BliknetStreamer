@@ -1,0 +1,64 @@
+<p><b>ChromeCast's:</b></p>
+<table class="table">
+    <thead>
+    <tr class="row">
+        <td>Device</td>
+        <td>Status</td>
+        <td>Random</td>
+        <td>Playlist</td>
+        <td>Start / Stop</td>
+        <td>Herstart</td>
+    </tr>
+    </thead>
+    {% for device in myCastDevices %}
+    <tr class="row">
+        <td>
+            <p id="devicename_{{loop.index}}">{{ device.devicenaam }}</p>
+        </td>
+        <td>
+            <p>{{ device.status }}</p>
+        </td>
+        <td align="center">
+            <input type="checkbox" id="randomplay_{{ device.devicenaam }}" checked/>
+        </td>
+        <td>
+            <select id="playlist_{{ device.devicenaam }}">  <!-- name="select_randomplay_{{ device.devicenaam }}"  -->
+                {% for playlist in playLists %}
+                {% if loop.index==0 %}
+                {% if device.playList=="" %}
+                <option value="{{ playlist.naam }}" selected>{{ playlist.naam }}</option>
+                {% elif device.playList== playlist.naam %}
+                <option value="{{ playlist.naam }}" selected>{{ playlist.naam }}</option>
+                {% else %}
+                <option value="{{ playlist.naam }}">{{ playlist.naam }}</option>
+                {% endif %}
+                {% else %}
+                {%if device.playList== playlist.naam %}
+                <option value="{{ playlist.naam }}" selected>{{ playlist.naam }}</option>
+                {% else %}
+                <option value="{{ playlist.naam }}">{{ playlist.naam }}</option>
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+
+                <!-- device.playList -->
+            </select>
+        </td>
+        <td>
+            {% if device.status=="actief" %}
+            <button id="deviceCmdButton_{{loop.index}}" onclick="sendCommand('{{ device.devicenaam }}', '0')">Stop
+            </button>
+            {% else %}
+            <button id="deviceCmdButton_{{loop.index}}" onclick="sendCommand('{{ device.devicenaam }}', '1')">Start
+            </button>
+            {% endif %}
+            </button>
+        </td>
+        <td>
+            <button id="deviceCmdButton_{{loop.index}}" onclick="sendCommand('{{ device.devicenaam }}', '99')">Herstart
+                Chrome Cast
+            </button>
+        </td>
+    </tr>
+    {% endfor %}
+</table>

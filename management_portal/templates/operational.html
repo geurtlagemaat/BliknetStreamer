@@ -1,0 +1,137 @@
+{% extends "_base.html" %}
+{% block body %}
+
+<h3 id="beheer">Beheercommando's</h3>
+
+<p id="command_status" class="message info monospace hidden"></p>
+
+<table class="commands" style="width: 100%">
+    <tr>
+        <td>
+            <div id="status-devices">Informatie aan het ophalen.</div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p><b>Zoeken naar Chrome Cast op het netwerk</b></p>
+            <button id="doDiscoverChromeCasyBtn" onclick="doDiscoverChromeCasts()">Zoek</button>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p><b>Feratel Index:</b></p>
+            <button id="doIndexBtn" onclick="doFeratelIndex()">Opnieuw Indexeren</button>
+        </td>
+    </tr>
+</table>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        getCastDevices();
+    });
+
+    function getCastDevices() {
+        $.ajax('/getCastDevices', {
+            success: function (data, status) {
+                $('#status-devices').html(data.rendered);
+            },
+            complete: function (xhr) {
+                console.log(xhr.status)
+                if (xhr.status == 401) {
+                    window.location.href = "/login?next=operational"
+                }
+            },
+            error: function (data, status) {
+                $('#status-devices').html(data.rendered);
+            }
+        });
+    }
+
+    function doFeratelIndex() {
+        var statusSel = '#command_status';
+        $.ajax('/doFeratelIndex', {
+            success: function (data, status) {
+                $(statusSel).removeClass('hidden');
+                $(statusSel).html(data.message);
+
+                setTimeout(function () {
+                    $(statusSel).addClass('hidden');
+                    $(statusSel).html('');
+                }, 5000);
+            },
+            complete: function (xhr) {
+                console.log(xhr.status)
+                if (xhr.status == 401) {
+                    window.location.href = "/login?next=operational"
+                }
+            },
+            error: function (data, status) {
+                $(statusSel).removeClass('hidden');
+                $(statusSel).html(data);
+            }
+        })
+    }
+
+    function doDiscoverChromeCasts() {
+        var statusSel = '#command_status';
+        $.ajax('/doRefreshCastDevices', {
+            success: function (data, status) {
+                $(statusSel).removeClass('hidden');
+                $(statusSel).html(data.message);
+
+                setTimeout(function () {
+                    $(statusSel).addClass('hidden');
+                    $(statusSel).html('');
+                }, 5000);
+            },
+            complete: function (xhr) {
+                console.log(xhr.status)
+                if (xhr.status == 401) {
+                    window.location.href = "/login?next=operational"
+                }
+            },
+            error: function (data, status) {
+                $(statusSel).removeClass('hidden');
+                $(statusSel).html(data);
+            }
+        })
+    }
+
+    function sendCommand(Device, Command) {
+        var isRandomPlay = 0;
+        if (document.getElementById('randomplay_' + Device).checked) {
+            isRandomPlay = 1;
+        }
+        var selPlaylist = "";
+        if (document.getElementById('playlist_' + Device).value) {
+            selPlaylist = document.getElementById('playlist_' + Device).value;
+        }
+        var statusSel = '#command_status';
+        $.ajax('/sendCastCommand?cmd=' + Command + '&devicename=' + Device + '&random=' + isRandomPlay + '&playlist=' + selPlaylist, {
+            success: function (data, status) {
+                $(statusSel).removeClass('hidden');
+                $(statusSel).html(data.message);
+
+                setTimeout(function () {
+                    $(statusSel).addClass('hidden');
+                    $(statusSel).html('');
+                }, 5000);
+            },
+            complete: function (xhr) {
+                console.log(xhr.status)
+                if (xhr.status == 401) {
+                    window.location.href = "/login?next=operational"
+                }
+            },
+            error: function (data, status) {
+                $(statusSel).removeClass('hidden');
+                $(statusSel).html(data);
+            }
+        })
+        getCastDevices();
+    }
+</script>
+{% endblock %}

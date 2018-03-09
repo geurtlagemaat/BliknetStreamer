@@ -1,0 +1,31 @@
+{% extends "_base.html" %}
+{% block body %}
+<h1>Feratel Geschiedenis</h1>
+<p id="command_status" class="message info monospace hidden"></p>
+<form id="history">
+    <div id="showHistory-result" class="result">
+        (geen zoekopdracht uitgevoerd)
+    </div>
+</form>
+<p>&nbsp;</p>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        showHistory();
+    });
+
+    function showHistory() {
+        $.ajax('/showFeratelHistory', {
+            success: function (data, status) {
+                $('#showHistory-result').html(data.rendered);
+            },
+            error: function (data, status) {
+                $('#showHistory-result').html(data.rendered);
+            }
+        });
+    }
+
+</script>
+{% endblock %}

@@ -1,0 +1,102 @@
+{% extends "_base.html" %}
+{% block body %}
+<h1>Playlists</h1>
+<p id="command_status" class="message info monospace hidden"></p>
+<form id="playlists">
+    <div id="showplaylists-result" class="result">
+        (geen zoekopdracht uitgevoerd)
+    </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        showItems();
+    });
+
+    function showItems() {
+        $.ajax('/getPlayListItems', {
+            success: function (data, status) {
+                $('#showplaylists-result').html(data.rendered);
+            },
+            error: function (data, status) {
+                $('#showplaylists-result').html(data.rendered);
+            }
+        });
+    }
+
+    function updateItem(e) {
+        var IDValue = $(e).attr('id');
+        var ItemID = IDValue.substring(IDValue.lastIndexOf('_') + 1);
+        var ItemNaam = document.getElementById("naam_" + ItemID).value;
+        var ItemOmschr = document.getElementById("omschrijving_" + ItemID).value;
+        var Url = "";
+        if (document.getElementById("url_" + ItemID) != null) {
+            Url = document.getElementById("url_" + ItemID).value;
+        }
+        $.ajax('/updatePlayListItem?id=' + ItemID + '&name=' + ItemNaam + '&omschr=' + ItemOmschr + '&url=' + Url, {
+            succes: function (data, status) {
+                $('#command_status').removeClass('hidden');
+                $('#command_status').html(data.message);
+            },
+            error: function (data, status) {
+                $('#command_status').removeClass('hidden');
+                $('#command_status').html(data.message);
+            }
+        })
+    }
+
+    function delItem(e) {
+        var IDValue = $(e).attr('id');
+        var ItemID = IDValue.substring(IDValue.lastIndexOf('_') + 1);
+        var ItemNaam = document.getElementById("naam_" + ItemID).value;
+        var confirmDelResult = confirm("Item '" + ItemNaam + "' definitief verwijderen met alle onderliggende items?");
+        if (confirmDelResult) {
+            $.ajax('/delPlayListItem?id=' + ItemID, {
+                succes: function (data, status) {
+                    $('#command_status').removeClass('hidden');
+                    $('#command_status').html(data.message);
+
+                },
+                error: function (data, status) {
+                    $('#command_status').removeClass('hidden');
+                    $('#command_status').html(data.message);
+                }
+            });
+            showItems()
+        }
+    }
+
+    function addItem(e) {
+        var IDValue = $(e).attr('id');
+        var PlayListID = "";
+        var NewItemNaam = "";
+        var NewItemOmschr = "";
+        var NewItemURL = "";
+        var NewAppID = "";
+        if (IDValue == 'btn_newPlayList') {
+            NewItemNaam = document.getElementById("newPlayListNameID").value;
+            NewItemOmschr = document.getElementById("newPlayListOmschrID").value;
+        }
+        else {
+            PlayListID = IDValue.substring(IDValue.lastIndexOf('_') + 1);
+            NewItemNaam = document.getElementById("new_item_name_" + PlayListID).value;
+            NewItemOmschr = document.getElementById("new_item_omschr_" + PlayListID).value;
+            NewItemURL = document.getElementById("new_item_url_" + PlayListID).value;
+        }
+        $.ajax('/addPlayListItem?name=' + NewItemNaam + "&omschr=" + NewItemOmschr + "&url=" + NewItemURL + "&parentid=" + PlayListID, {
+            succes: function (data, status) {
+                $('#command_status').removeClass('hidden');
+                $('#command_status').html(data.message);
+            },
+            error: function (data, status) {
+                $('#command_status').removeClass('hidden');
+                $('#command_status').html(data.message);
+            }
+        });
+        showItems()
+    }
+
+</script>
+{% endblock %}

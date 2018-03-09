@@ -1,0 +1,358 @@
+body {
+    background-color: #eee;
+    overflow-y: scroll;
+}
+
+body, td, th, caption, button, input {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+h2 {
+    color: green;
+}
+
+h3 {
+    color: green;
+}
+
+h4 {
+    color: green;
+}
+
+a:visited {
+    color: blue;
+}
+
+.container {
+
+}
+
+.container .content {
+    background-color: white;
+    padding: 20px;
+}
+
+#cssmenu ul,
+#cssmenu li,
+#cssmenu span,
+#cssmenu a {
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+#cssmenu {
+    line-height: 1;
+    border-radius: 5px 5px 0 0;
+    -moz-border-radius: 5px 5px 0 0;
+    -webkit-border-radius: 5px 5px 0 0;
+    background: #141414;
+    background: -moz-linear-gradient(top, #333333 0%, #141414 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #333333), color-stop(100%, #141414));
+    background: -webkit-linear-gradient(top, #333333 0%, #141414 100%);
+    background: -o-linear-gradient(top, #333333 0%, #141414 100%);
+    background: -ms-linear-gradient(top, #333333 0%, #141414 100%);
+    background: linear-gradient(to bottom, #333333 0%, #141414 100%);
+    border-bottom: 2px solid #0fa1e0;
+    width: auto;
+    position: relative;
+}
+
+#cssmenu:after,
+#cssmenu ul:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+#cssmenu li a {
+    background: #141414;
+    background: -moz-linear-gradient(top, #333333 0%, #141414 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #333333), color-stop(100%, #141414));
+    background: -webkit-linear-gradient(top, #333333 0%, #141414 100%);
+    background: -o-linear-gradient(top, #333333 0%, #141414 100%);
+    background: -ms-linear-gradient(top, #333333 0%, #141414 100%);
+    background: linear-gradient(to bottom, #333333 0%, #141414 100%);
+    color: #ffffff;
+    display: block;
+    padding: 19px 20px;
+    text-decoration: none;
+}
+
+#cssmenu ul {
+    list-style: none;
+}
+
+#cssmenu > ul > li {
+    display: inline-block;
+    float: left;
+    margin: 0;
+}
+
+#cssmenu.align-center {
+    text-align: center;
+}
+
+#cssmenu.align-center > ul > li {
+    float: none;
+}
+
+#cssmenu.align-center ul ul {
+    text-align: left;
+}
+
+#cssmenu.align-right > ul {
+    float: right;
+}
+
+#cssmenu.align-right ul ul {
+    text-align: right;
+}
+
+#cssmenu > ul > li > a {
+    color: #ffffff;
+}
+
+#cssmenu > ul > li:hover:after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #0fa1e0;
+    margin-left: -10px;
+}
+
+#cssmenu > ul > li:first-child > a {
+    border-radius: 5px 0 0 0;
+    -moz-border-radius: 5px 0 0 0;
+    -webkit-border-radius: 5px 0 0 0;
+}
+
+#cssmenu.align-right > ul > li:first-child > a,
+#cssmenu.align-center > ul > li:first-child > a {
+    border-radius: 0;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+}
+
+#cssmenu.align-right > ul > li:last-child > a {
+    border-radius: 0 5px 0 0;
+    -moz-border-radius: 0 5px 0 0;
+    -webkit-border-radius: 0 5px 0 0;
+}
+
+#cssmenu > ul > li.active > a,
+#cssmenu > ul > li:hover > a {
+    color: #ffffff;
+    box-shadow: inset 0 0 3px #000000;
+    -moz-box-shadow: inset 0 0 3px #000000;
+    -webkit-box-shadow: inset 0 0 3px #000000;
+    background: #555555;
+    background: -moz-linear-gradient(top, #262626 0%, #555555 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #262626), color-stop(100%, #070707));
+    background: -webkit-linear-gradient(top, #262626 0%, #070707 100%);
+    background: -o-linear-gradient(top, #262626 0%, #070707 100%);
+    background: -ms-linear-gradient(top, #262626 0%, #070707 100%);
+    background: linear-gradient(to bottom, #262626 0%, #555555 100%);
+}
+
+#cssmenu .has-sub {
+    z-index: 1;
+}
+
+#cssmenu .has-sub:hover > ul {
+    display: block;
+}
+
+#cssmenu .has-sub ul {
+    display: none;
+    position: absolute;
+    width: 200px;
+    top: 100%;
+    left: 0;
+}
+
+#cssmenu.align-right .has-sub ul {
+    left: auto;
+    right: 0;
+}
+
+#cssmenu .has-sub ul li {
+    *margin-bottom: -1px;
+}
+
+#cssmenu .has-sub ul li a {
+    background: #0fa1e0;
+    border-bottom: 1px dotted #31b7f1;
+    filter: none;
+    display: block;
+    line-height: 120%;
+    padding: 10px;
+    color: #ffffff;
+}
+
+#cssmenu .has-sub ul li:hover a {
+    background: #0c7fb0;
+}
+
+#cssmenu ul ul li:hover > a {
+    color: #ffffff;
+}
+
+#cssmenu .has-sub .has-sub:hover > ul {
+    display: block;
+}
+
+#cssmenu .has-sub .has-sub ul {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 0;
+}
+
+#cssmenu.align-right .has-sub .has-sub ul,
+#cssmenu.align-right ul ul ul {
+    left: auto;
+    right: 100%;
+}
+
+#cssmenu .has-sub .has-sub ul li a {
+    background: #0c7fb0;
+    border-bottom: 1px dotted #31b7f1;
+}
+
+#cssmenu .has-sub .has-sub ul li a:hover {
+    background: #0a6d98;
+}
+
+#cssmenu ul ul li.last > a,
+#cssmenu ul ul li:last-child > a,
+#cssmenu ul ul ul li.last > a,
+#cssmenu ul ul ul li:last-child > a,
+#cssmenu .has-sub ul li:last-child > a,
+#cssmenu .has-sub ul li.last > a {
+    border-bottom: 0;
+}
+
+div.scroll {
+    height: 800px;
+    width: 982px;
+    overflow: auto;
+    border: 1px solid #666;
+    background-color: #fff;
+    padding: 8px;
+}
+
+.hidden {
+    display: none;
+}
+
+.message {
+    border: 1px solid transparent;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.message.info {
+    background-color: #dfd;
+    border-color: #585;
+}
+
+.message.error {
+    background-color: #fdd;
+    border-color: #855;
+}
+
+table.commands {
+    border-collapse: collapse;
+}
+
+table.commands td,
+table.commands th {
+    padding: 10px 5px 10px 0;
+    vertical-align: top;
+    border-top: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+}
+
+table.commands p {
+    margin: 0 0 5px 0;
+}
+
+table.commands button {
+    width: 100%;
+    white-space: nowrap;
+}
+
+.monospace, code, pre {
+    font-family: Consolas, Courier, monospace;
+}
+
+div#logo {
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: white;
+    padding: 19px 20px 19px 20px;
+}
+
+div#logo a {
+    color: white;
+}
+
+.correlation-record th {
+    text-align: left;
+}
+
+.result {
+    border: 1px solid #aaa;
+    padding: 10px;
+    background-color: #fafafa;
+}
+
+.correlation-records {
+    border-collapse: collapse;
+}
+
+.correlation-records td,
+.correlation-records th {
+    border: 1px solid #ddd;
+    padding: 3px;
+}
+
+table.formatted {
+    border: 1px solid #999;
+    border-collapse: collapse;
+}
+
+table thead td,
+table thead th {
+    background-color: #eee;
+}
+
+table.formatted td,
+table.formatted th {
+    border: 1px solid #999;
+    padding: 5px;
+}
+
+.users button {
+    padding: 0;
+    font-size: 12px;
+}
+
+.users td {
+    vertical-align: top;
+}
+
+button,
+input[type=submit] {
+    cursor: pointer;
+}

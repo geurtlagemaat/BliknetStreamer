@@ -1,0 +1,81 @@
+<table class="table table-hover message-records" style="width: 100%">
+    <thead>
+    <tr class="row">
+        <th colspan="2">Naam</th>
+        <th>Omschrijving</th>
+        <th>URL</th>
+        <th>&nbsp;</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for playListID, playList in playLists.iteritems() %}
+    {% for playListItemID, playListItem in playList.iteritems() %}
+    {% if playListItemID==0 %}
+    <!-- playlist meta -->
+    <tr class="row">
+        <td colspan="2" class="text-nowrap"><input type="text" style="width: 400px;" id="naam_{{ playListID }}"
+                                                   value="{{ playListItem.naam }}" onfocusout="updateItem(this)"/></td>
+        <td class="text-nowrap"><input type="text" style="width: 400px;" id="omschrijving_{{ playListID }}"
+                                       value="{{ playListItem.omschrijving }}" onfocusout="updateItem(this)"/></td>
+        <td>&nbsp;</td>
+        <td>
+            <input type="button" id="btn_Del_playlist_{{ playListID }}" value="-" style="width: 25px"
+                   onclick="delItem(this)"/>
+        </td>
+    </tr>
+    {% else %}
+    <!-- playlist item -->
+    <tr class="row">
+        <td>&nbsp;</td>
+        <td class="text-nowrap"><input type="text" style="width: 400px;" id="naam_{{ playListItemID }}"
+                                       value="{{ playListItem.naam }}" onfocusout="updateItem(this)"/></td>
+        <td class="text-nowrap"><input type="text" style="width: 400px;" id="omschrijving_{{ playListItemID }}"
+                                       value="{{ playListItem.omschrijving }}" onfocusout="updateItem(this)"/></td>
+        <td class="text-nowrap"><input type="text" style="width: 400px;" id="url_{{ playListItemID }}"
+                                       value="{{ playListItem.url }}" onfocusout="updateItem(this)"/></td>
+        <td><input type="button" id="btn_Del_playlistItem_{{ playListItemID }}" value="-" style="width: 25px"
+                   onclick="delItem(this)"/></td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+    <tr class="row">
+        <td>&nbsp;</td>
+        <td class="text-nowrap"><input type="text" style="width: 400px;" id="new_item_name_{{ playListID }}"/></td>
+        <td class="text-nowrap"><input type="text" style="width: 400px;" id="new_item_omschr_{{ playListID }}"/></td>
+        <td class="text-nowrap"><input type="text" style="width: 400px;" id="new_item_url_{{ playListID }}"/></td>
+        <td><input type="button" id="btn_add_item_{{ playListID }}" value="+" style="width: 25px"
+                   onclick="addItem(this)"/></td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td colspan="5"><b>Playlist toevoegen</b></td>
+    </tr>
+    <tr class="row">
+        <td colspan="2" class="text-nowrap"><p><input type="text" style="width: 400px;" id="newPlayListNameID"
+                                                      value=""/></p></td>
+        <td class="text-nowrap"><p><input type="text" style="width: 400px;" id="newPlayListOmschrID" value=""/></p></td>
+        <td>&nbsp;</td>
+        <td><input type="button" id="btn_newPlayList" value="+" style="width: 25px" onclick="addItem(this)"/></td>
+    </tr>
+</table>
+<div>
+    <p><b>Legenda:</b></p>
+    <table class="table table-hover message-records" style="width: 100%">
+        <thead>
+        <tr class="row">
+            <td>Prefix</td>
+            <td>Betekenis</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="row">
+            <td>ChromeCastAppId</td>
+            <td>Applicatie ID van een ChromeCast receiver application</td>
+        </tr>
+        <tr class="row">
+            <td>NASFile</td>
+            <td>een specifiek afspeelbare file op de NAS share (relatief ten opzicht van /mnt/NAS)</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

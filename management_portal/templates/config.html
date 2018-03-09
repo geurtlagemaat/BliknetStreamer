@@ -1,0 +1,91 @@
+{% extends "_base.html" %}
+{% block body %}
+<h1>Feratel Camera's</h1>
+<p id="command_status" class="message info monospace hidden"></p>
+<form id="cams">
+    <div id="showCams-result" class="result">
+        (geen zoekopdracht uitgevoerd)
+    </div>
+</form>
+<p>&nbsp;</p>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        <!-- assignResource('#reloadCams', '/showCams', '#command_status'); -->
+        $('#updateSubscriptions').on('click', function (evt) {
+            evt.preventDefault();
+            updateSubscriptions();
+        });
+        showCams();
+    });
+
+    function showCams() {
+        $.ajax('/showCams', {
+            success: function (data, status) {
+                $('#showCams-result').html(data.rendered);
+            },
+            complete: function (xhr) {
+                console.log(xhr.status)
+                if (xhr.status == 401) {
+                    window.location.href = "/login?next=operational"
+                }
+            },
+            error: function (data, status) {
+                $('#showCams-result').html(data.rendered);
+            }
+        });
+    }
+
+    function updateSubscription(e) {
+        var IDValue = $(e).attr('id');
+        var isChecked = 0;
+        if (document.getElementById(IDValue).checked) {
+            isChecked = 1;
+        }
+        $.ajax('/updateCamSubscription?id=' + IDValue + "&subscribed=" + isChecked, {
+            succes: function (data, status) {
+                $('#command_status').removeClass('hidden');
+                $('#command_status').html(data.message);
+            },
+            complete: function (xhr) {
+                console.log(xhr.status)
+                if (xhr.status == 401) {
+                    window.location.href = "/login?next=operational"
+                }
+            },
+            error: function (data, status) {
+                $('#command_status').removeClass('hidden');
+                $('#command_status').html(data.message);
+            }
+        })
+    }
+
+    function updateGPS(e) {
+        var IDValue = $(e).attr('id');
+        if (IDValue != null) {
+            var FeratelCamID = IDValue.substring(IDValue.lastIndexOf('_') + 1);
+            var GPSData = document.getElementById("gps_" + FeratelCamID).value;
+            if (GPSData != null) {
+                $.ajax('/updateGPS?id=' + FeratelCamID + "&gps='" + GPSData + "'", {
+                    succes: function (data, status) {
+                        $('#command_status').removeClass('hidden');
+                        $('#command_status').html(data.message);
+                    },
+                    complete: function (xhr) {
+                        console.log(xhr.status)
+                        if (xhr.status == 401) {
+                            window.location.href = "/login?next=operational"
+                        }
+                    },
+                    error: function (data, status) {
+                        $('#command_status').removeClass('hidden');
+                        $('#command_status').html(data.message);
+                    }
+                })
+            }
+        }
+    }
+</script>
+{% endblock %}

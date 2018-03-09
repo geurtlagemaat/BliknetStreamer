@@ -1,0 +1,1 @@
+from portal_resource import startPortal

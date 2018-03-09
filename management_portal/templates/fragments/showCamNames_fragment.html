@@ -1,0 +1,9 @@
+<select id="camnames">
+    {% for camname in myCamNames %}
+    {% if loop.index==0 %}
+    <option value="{{ camname }}" selected>{{ camname }}</option>
+    {% else %}
+    <option value="{{ camname }}">{{ camname }}</option>
+    {% endif %}
+    {% endfor %}
+</select>

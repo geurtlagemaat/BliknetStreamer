@@ -1,0 +1,20 @@
+<table class="table table-hover message-records" style="width: auto;">
+    <thead>
+    <tr class="row">
+        <th>Camera Naam</th>
+        <th>Video</th>
+        <th>Omvang</th>
+        <th>&nbsp;</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for camvideo in myCamVideos %}
+    <tr class="row">
+        <td class="text-nowrap"><p>{{ camvideo.cameranaam}}</p></td>
+        <td class="text-nowrap"><p>{{ camvideo.filename }}</p></td>
+        <td class="text-nowrap"><p>{{ camvideo.size }}</p></td>
+        <td><input type="button" id="{{ camvideo.cameranaam }}/camvideo.filename" value="Play" style="width: 25px"
+                   onclick="playSelVideo(this)"/></td>
+    </tr>
+    {% endfor %}
+</table>

@@ -1,0 +1,109 @@
+{% extends "_base.html" %}
+{% block head %}
+{{ super() }}
+<link href="http://vjs.zencdn.net/6.2.7/video-js.css" rel="stylesheet">
+<!-- If you'd like to support IE8 -->
+<script src="http://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
+{% endblock %}
+{% block body %}
+<h3>Bewaking Cameras Video index</h3>
+<p id="command_status" class="message info monospace hidden"></p>
+<table class="table" style="width: 100%;">
+    <tr>
+        <td>
+            <form id="cams">
+                <table class="table" style="width: 100%;">
+                    <tr>
+                        <td><p>Datum bereik (TODO)</p></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div id="camNamesResult"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>
+                                <button style="width: 200px" type="button" id="find-videos">Zoeken</button>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <div id="showCams-result" class="result">
+                (geen zoekopdracht uitgevoerd)
+            </div>
+        </td>
+        <td style="vertical-align: top">
+            <video id="my-video" class="video-js" controls preload="auto" width="640" height="264"
+                   poster="MY_VIDEO_POSTER.jpg" data-setup="{}">
+                <source id="my-video-source"
+                        src="http://bliknet.com:8710?nasfile=/mnt/NAS/camera/camera/camvideos/blikvoor/blikvoor_30-09-2017_08-01-30.mp4"
+                        type='video/mp4'>
+                <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web
+                    browser that
+                    <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                </p>
+            </video>
+        </td>
+    </tr>
+</table>
+<p>&nbsp;</p>
+<script src="http://vjs.zencdn.net/6.2.7/video.js"></script>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        $('#find-videos').on('click', function (evt) {
+            evt.preventDefault();
+            showVideos();
+        });
+        camNames();
+        showVideos();
+    });
+
+    function showVideos() {
+        var SelCam = "";
+        if (document.getElementById('camnames').value) {
+            SelCam = document.getElementById('camnames').value;
+        }
+        $.ajax('/getSecCamVideos?selcam=' + SelCam, {
+            success: function (data, status) {
+                $('#showCams-result').html(data.rendered);
+            },
+            complete: function (xhr) {
+                console.log(xhr.status)
+                if (xhr.status == 401) {
+                    window.location.href = "/login?next=operational"
+                }
+            },
+            error: function (data, status) {
+                $('#showCams-result').html(data.rendered);
+            }
+        });
+    }
+
+    function camNames() {
+        $.ajax('/getSecCamNames', {
+            success: function (data, status) {
+                $('#camNamesResult').html(data.rendered);
+            },
+            complete: function (xhr) {
+                console.log(xhr.status)
+                if (xhr.status == 401) {
+                    window.location.href = "/login?next=operational"
+                }
+            },
+            error: function (data, status) {
+                $('#camNamesResult').html(data.rendered);
+            }
+        });
+    }
+
+    function playSelVideo(e) {
+        var IDValue = $(e).attr('id');
+        document.getElementById("my-video-source").attr("src", $IDValue);
+    }
+</script>
+{% endblock %}
